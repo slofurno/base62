@@ -91,14 +91,5 @@ func (enc *Encoding) Decode(dst, src []byte) int {
 		}
 	}
 
-	if rem > 0 {
-		v := r & (255 >> (8 - rem))
-		//check if its just padding
-		if v > 0 {
-			dst[j] = byte(v)
-			j++
-		}
-	}
-
 	return j
 }

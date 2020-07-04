@@ -2,7 +2,6 @@ package base62
 
 import (
 	"crypto/rand"
-	"fmt"
 	"testing"
 )
 
@@ -14,10 +13,10 @@ func TestEncoding(t *testing.T) {
 		rand.Read(src)
 
 		s := enc.EncodeToString(src)
-		fmt.Println(s)
+		//fmt.Println(s)
 
 		decoded := enc.DecodeString(s)
-		fmt.Println(decoded)
+		//fmt.Println(decoded)
 
 		if string(src) != string(decoded) {
 			t.Fatalf("expected bytes: %v, got: %v\n", src, decoded)
