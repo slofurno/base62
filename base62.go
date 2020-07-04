@@ -1,22 +1,25 @@
 package base62
 
-import ()
-
-const encoding = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+const defaultEncoding = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
 type Encoding struct {
+	encode    [64]byte
 	decodeMap [256]byte
 }
 
-func New() *Encoding {
+func New(encoder string) *Encoding {
 	enc := &Encoding{}
 
-	for i := 0; i < len(encoding); i++ {
-		enc.decodeMap[encoding[i]] = byte(i)
+	copy(enc.encode[:], encoder)
+
+	for i := 0; i < len(encoder); i++ {
+		enc.decodeMap[encoder[i]] = byte(i)
 	}
 
 	return enc
 }
+
+var StdEncoding = New(defaultEncoding)
 
 func (enc *Encoding) EncodeToString(src []byte) string {
 	dst := make([]byte, len(src)*2)
@@ -42,7 +45,7 @@ func (enc *Encoding) Encode(dst, src []byte) int {
 				cur = 61
 			}
 
-			dst[j] = encoding[cur]
+			dst[j] = enc.encode[cur]
 			j++
 
 			rem -= consumed
@@ -52,7 +55,7 @@ func (enc *Encoding) Encode(dst, src []byte) int {
 	if rem > 0 {
 		cur := r & (63 >> (6 - rem)) //isolate remainder
 		cur = cur << (6 - rem)       //left align
-		dst[j] = encoding[cur]
+		dst[j] = enc.encode[cur]
 		j++
 	}
 
