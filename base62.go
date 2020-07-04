@@ -28,7 +28,7 @@ func (enc *Encoding) EncodeToString(src []byte) string {
 }
 
 func (enc *Encoding) Encode(dst, src []byte) int {
-	rem := 0
+	rem := uint(0)
 	var r uint
 	j := 0
 
@@ -39,7 +39,7 @@ func (enc *Encoding) Encode(dst, src []byte) int {
 		for rem >= 6 {
 			cur := (r >> (rem - 6)) & 63
 
-			consumed := 6
+			consumed := uint(6)
 			if cur >= 61 {
 				consumed = 4
 				cur = 61
@@ -70,12 +70,12 @@ func (enc *Encoding) DecodeString(s string) []byte {
 }
 
 func (enc *Encoding) Decode(dst, src []byte) int {
-	rem := 0
+	rem := uint(0)
 	var r uint
 	j := 0
 
 	for i := 0; i < len(src); i++ {
-		used := 6
+		used := uint(6)
 		read := uint(enc.decodeMap[src[i]])
 		if read >= 61 {
 			used = 4
